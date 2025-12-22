@@ -46,7 +46,7 @@ export function Header() {
         </button>
 
         <a 
-          href="https://github.com" 
+          href="https://github.com/sunny-prakash/currency-converter" 
           target="_blank" 
           rel="noopener noreferrer"
           className="hidden md:block px-4 py-2 rounded-full bg-[var(--foreground)] text-[var(--background)] text-sm font-medium transition-all hover:scale-105"
