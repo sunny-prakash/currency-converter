@@ -8,7 +8,6 @@ interface CurrencyRowProps {
   currency: string;
   onAmountChange: (amount: string) => void;
   onCurrencyChange: (currency: string) => void;
-  label?: string;
   readOnly?: boolean;
   onRemove?: () => void;
 }
@@ -18,7 +17,6 @@ export function CurrencyRow({
   currency,
   onAmountChange,
   onCurrencyChange,
-  label,
   readOnly = false,
   onRemove,
 }: CurrencyRowProps) {
@@ -34,23 +32,9 @@ export function CurrencyRow({
   });
 
   return (
-    <motion.div 
-      layout
-      className="flex flex-col gap-2 w-full relative group/row"
-    >
-      <div className="flex justify-between items-center">
-        {label && <label className="text-sm text-[var(--text-secondary)] font-medium ml-1">{label}</label>}
-        {onRemove && (
-          <button
-            onClick={onRemove}
-            className="text-[var(--foreground)]/20 hover:text-red-400 transition-colors opacity-0 group-hover/row:opacity-100 p-1"
-            title="Remove currency"
-          >
-            <X size={14} />
-          </button>
-        )}
-      </div>
-      <motion.div 
+    <motion.div layout className="flex flex-col gap-2 w-full relative group/row">
+      {/* Input + currency selector row */}
+      <motion.div
         whileHover={{ scale: 1.01 }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
         className="flex items-center gap-3 bg-[var(--foreground)]/5 p-4 rounded-2xl border border-[var(--card-border)] focus-within:border-purple-500/50 focus-within:bg-[var(--foreground)]/10 transition-all duration-300 hover:border-[var(--card-border)]/50"
@@ -63,7 +47,9 @@ export function CurrencyRow({
           placeholder="0.00"
           readOnly={readOnly}
         />
-        <div className="relative shrink-0">
+
+        {/* Currency selector pill */}
+        <div className="relative shrink-0 flex items-center gap-1">
           <select
             value={currency}
             onChange={(e) => onCurrencyChange(e.target.value)}
@@ -75,24 +61,36 @@ export function CurrencyRow({
               </option>
             ))}
           </select>
+
           <div className="flex items-center gap-2 bg-[var(--foreground)]/10 px-3 py-2 rounded-xl hover:bg-[var(--foreground)]/20 transition-colors cursor-pointer border border-[var(--card-border)] backdrop-blur-sm">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleFavorite(currency);
-              }}
-              className="hover:scale-125 active:scale-90 transition-all"
-            >
-              <Star 
-                size={16} 
-                className={isFavorite ? "fill-yellow-400 text-yellow-400" : "text-[var(--foreground)]/30"} 
-              />
-            </button>
-            <span className="text-2xl">{CURRENCIES.find((c) => c.code === currency)?.flag}</span>
-            <span className="font-bold text-[var(--foreground)] text-lg">{currency}</span>
+            {isFavorite && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleFavorite(currency);
+                }}
+                className="hover:scale-125 active:scale-90 transition-all"
+                title="Remove from favourites"
+              >
+                <Star size={16} className="fill-yellow-400 text-yellow-400" />
+              </button>
+            )}
+            <span className="text-xl leading-none">{CURRENCIES.find((c) => c.code === currency)?.flag}</span>
+            <span className="font-bold text-[var(--foreground)] text-base">{currency}</span>
             <ChevronDown className="w-4 h-4 text-[var(--foreground)]/50" />
           </div>
+
+          {/* X (remove) button — inside the row, to the right of the pill */}
+          {onRemove && (
+            <button
+              onClick={onRemove}
+              className="ml-1 p-1.5 rounded-lg text-[var(--foreground)]/20 hover:text-red-400 hover:bg-red-400/10 transition-all opacity-0 group-hover/row:opacity-100"
+              title="Remove currency"
+            >
+              <X size={14} />
+            </button>
+          )}
         </div>
       </motion.div>
     </motion.div>

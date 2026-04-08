@@ -33,33 +33,24 @@ export interface HistoricalRate {
 }
 
 export async function getHistoricalRates(base: string, target: string, days: number = 30): Promise<HistoricalRate[]> {
-  const endDate = new Date();
-  const startDate = new Date();
-  startDate.setDate(endDate.getDate() - days);
-
-  const startStr = startDate.toISOString().split('T')[0];
-  const endStr = endDate.toISOString().split('T')[0];
-
-  // Using frankfurter.app for historical data (open.er-api.com doesn't support history easily without paying sometimes or different endpoint)
-  // Frankfurter is free and good for major currencies.
-  // Note: Frankfurter might not support ALL currencies that open.er-api does, but it supports most.
-  const API_URL = `https://api.frankfurter.app/${startStr}..${endStr}?from=${base}&to=${target}`;
-  console.log("Fetching historical rates from:", API_URL);
+  const upperBase = base.toUpperCase();
+  const upperTarget = target.toUpperCase();
 
   try {
-    const response = await fetch(API_URL);
+    // Call our own Next.js API proxy to avoid browser CORS issues with external APIs
+    const response = await fetch(
+      `/api/historical?base=${upperBase}&target=${upperTarget}&days=${days}`
+    );
+
     if (!response.ok) {
-      console.warn(`Frankfurter API failed with status ${response.status}: ${response.statusText}`);
+      console.warn(`Historical API proxy failed: ${response.status}`);
       return [];
     }
+
     const data = await response.json();
-    console.log("Historical data received:", data);
-    
-    if (data.rates) {
-      return Object.entries(data.rates).map(([date, rates]: [string, any]) => ({
-        date,
-        rate: rates[target]
-      }));
+
+    if (data.rates && Array.isArray(data.rates)) {
+      return data.rates;
     }
     return [];
   } catch (error) {

@@ -8,15 +8,15 @@ export function Header() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <header className="w-full flex justify-between items-center py-6 px-4 md:px-8 max-w-7xl mx-auto relative z-50">
-      <Link href="/" className="flex items-center gap-2 group">
+    <header className="w-full flex justify-between items-center py-4 md:py-6 px-4 md:px-8 max-w-7xl mx-auto relative z-50 flex-wrap gap-y-4">
+      <Link href="/" className="flex items-center gap-2 group shrink-0">
         <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/20 group-hover:scale-110 transition-transform duration-300">
           CF
         </div>
-        <span className="text-xl font-bold tracking-tight text-[var(--foreground)]">CurrencyFlow</span>
+        <span className="hidden sm:block text-xl font-bold tracking-tight text-[var(--foreground)]">CurrencyFlow</span>
       </Link>
 
-      <nav className="flex items-center gap-6">
+      <nav className="flex flex-wrap items-center gap-4 sm:gap-6">
         <Link 
           href="/" 
           className="text-sm font-medium opacity-60 hover:opacity-100 transition-opacity text-[var(--foreground)]"

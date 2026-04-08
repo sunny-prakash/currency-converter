@@ -16,7 +16,7 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(undefined
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [baseCurrency, setBaseCurrency] = useState("USD");
   const [targetCurrencies, setTargetCurrencies] = useState<string[]>(["EUR"]);
-  const [favorites, setFavorites] = useState<string[]>(["USD", "EUR", "GBP", "JPY"]);
+  const [favorites, setFavorites] = useState<string[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Load from localStorage on mount
